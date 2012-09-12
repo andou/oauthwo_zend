@@ -1,31 +1,19 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of TokenConcreteFactory
  *
  * @author andou
  */
-class Oauth_Factory_TokenConcreteFactory  {
+class Oauth_Factory_TokenProducer  {
 
     /**
      * Creates a Token
      *
-     * @return Oauth_Model_IToken
+     * @return Oauth_Model_Token
      */
     public function create(Oauth_Model_ResourceOwner $resource_owner, $scopes) {
 
-        /**
-         * per il momento crea un token in maniera completamente randomica
-         * si tratta della generazione di un identificativo sul DB.
-         * 
-         * Può essere cambiato a piacimento
-         */
-        $code = $this->generateRandomNumber(40);
         $code = array();
 
 
@@ -56,14 +44,11 @@ class Oauth_Factory_TokenConcreteFactory  {
             }
         }
 
-
-        //$access_token->setCode(print_r( /*$token_data*/json_encode($code)  , true));
+        
         $access_token->setCode(base64_encode(json_encode($code)));
         $access_token->setType('bearer');
         $access_token->setExpireDate(time() + ACCESS_TOKEN_VALIDITY);
-
-        //return "stocazzo, bello!";
-
+        
         return $access_token;
     }
 
@@ -89,14 +74,7 @@ class Oauth_Factory_TokenConcreteFactory  {
         return $datas;
     }
 
-    private function generateRandomNumber($codeLen) {
-        if (file_exists('/dev/urandom')) { // Get 100 bytes of random data
-            $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
-        } else {
-            $randomData = mt_rand() . mt_rand() . mt_rand() . mt_rand() . microtime(true) . uniqid(mt_rand(), true);
-        }
-        return substr(hash('sha512', $randomData), 0, $codeLen);
-    }
+
 
 }
 
