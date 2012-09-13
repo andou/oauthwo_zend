@@ -48,6 +48,11 @@ abstract class Oauth_Mapper_Abstract {
         return $this;
     }
     
+    /**
+     * Returns the used db table
+     *
+     * @return mixed
+     */
     public function getDbTable() {
         if (null === $this->_dbTable) {
             $this->setDbTable($this->table_name);
@@ -56,5 +61,3 @@ abstract class Oauth_Mapper_Abstract {
     }
 
 }
-
-?>

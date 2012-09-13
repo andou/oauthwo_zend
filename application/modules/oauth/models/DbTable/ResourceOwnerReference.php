@@ -1,20 +1,33 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * ResourceOwnerReference.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of ResourceOwnerReference
+ *  Implements the Resource Owner Identity Equivalence Class reference Table
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Model_DbTable_ResourceOwnerReference extends Zend_Db_Table_Abstract
-{
+class Oauth_Model_DbTable_ResourceOwnerReference extends Zend_Db_Table_Abstract {
 
+    /**
+     * db table name
+     * @var type 
+     */
     protected $_name = 'user_reference';
-    protected $_primary = array('user_id','resource_server_id');
+
+    /**
+     * primary columns names
+     * 
+     * @var array
+     */
+    protected $_primary = array('user_id', 'resource_server_id');
 
 }
 

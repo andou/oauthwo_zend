@@ -1,19 +1,33 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * ResourceServer.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of ResourceServer
+ *  Implements a Resource Server DataBase Table
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Model_DbTable_ResourceServer extends Zend_Db_Table_Abstract
-{
+class Oauth_Model_DbTable_ResourceServer extends Zend_Db_Table_Abstract {
 
+    /**
+     * db table name
+     * 
+     * @var string
+     */
     protected $_name = 'resource_server';
+
+    /**
+     * primary column name
+     *
+     * @var string
+     */
     protected $_primary = 'resource_server_id';
 
 }
