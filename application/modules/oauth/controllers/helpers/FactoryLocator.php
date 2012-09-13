@@ -38,10 +38,10 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     /**
      * Returns the correct factory to create a refresh token
      *
-     * @return Oauth_Factory_RefreshTokenConcreteFactory 
+     * @return Oauth_Builder_RefreshToken 
      */
     public function getRefreshtokenFactory(){
-        return new Oauth_Factory_RefreshTokenConcreteFactory();
+        return new Oauth_Builder_RefreshToken();
     }
     
     

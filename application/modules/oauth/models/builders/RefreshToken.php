@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * RefreshTokenC.php, 
+ * RefreshToken.php, 
  * 
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  * @version 0.1
@@ -57,7 +57,7 @@ class Oauth_Builder_RefreshToken{
      * Consumes a Refresh Token deleting it from the DB
      *
      * @param string $code
-     * @return string
+     * @return Oauth_Model_RefreshToken
      */
     public function consume($code) {        
         $codeMapper = new Oauth_Mapper_RefreshToken();
