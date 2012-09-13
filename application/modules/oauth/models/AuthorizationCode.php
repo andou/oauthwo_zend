@@ -30,7 +30,7 @@ class Oauth_Model_AuthorizationCode {
     protected $_client;
     
     /**
-     * Scopes this code grant for
+     * Scopes this code grants for
      * @var string
      */
     protected $_scopes;
