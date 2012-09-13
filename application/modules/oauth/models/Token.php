@@ -1,14 +1,17 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * Token.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of Token
+ *  Implements a Token Model Object
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Model_Token {
 
@@ -44,5 +47,3 @@ class Oauth_Model_Token {
     }
 
 }
-
-?>

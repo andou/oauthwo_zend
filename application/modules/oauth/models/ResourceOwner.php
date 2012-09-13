@@ -1,14 +1,17 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * ResourceOwner.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of ResourceOwner
+ *  Implements a Resource Owner Model Object
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Model_ResourceOwner{
     
@@ -45,5 +48,3 @@ class Oauth_Model_ResourceOwner{
     
     
 }
-
-?>

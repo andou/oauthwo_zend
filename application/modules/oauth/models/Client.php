@@ -1,11 +1,54 @@
 <?php
+/**
+ * 
+ * Client.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
+ */
+
+/**
+ *  Implements a Client Model Object
+ *
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ */
 
 class Oauth_Model_Client {
 
+    /**
+     * This client's id
+     * 
+     * @var string
+     */
     protected $_id;
+    
+    /**
+     * This client's name
+     * 
+     * @var string
+     */
     protected $_name;
+    
+    /**
+     * This client's secret
+     * 
+     * @var string
+     */
     protected $_secret;
+    
+    /**
+     * This client's redirect uri
+     * 
+     * @var string
+     */
     protected $_redirectUri;
+    
+    /**
+     * This client's type
+     * 
+     * @var string
+     */
     protected $_type;
 
     public function setId($id) {

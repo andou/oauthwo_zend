@@ -1,19 +1,20 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * Scope.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of Scope
+ *  Implements a Scope Model Object
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Model_Scope{
-    //put your code here
-    
-    
+       
     protected $_name;
     protected $_description;
     protected $_resource_server;
