@@ -19,7 +19,7 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
      * @return Oauth_Model_Factory_TokenAbstractFactory
      */
     public function getTokenFactory(){
-        return new Oauth_Factory_TokenConcreteFactory();
+        return new Oauth_Factory_TokenProducer();
     }
     
     

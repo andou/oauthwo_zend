@@ -1,12 +1,6 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of JSONToken
+ * This class is a JSON Encrypted Token producer
  *
  * @author andou
  */

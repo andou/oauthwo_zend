@@ -1,16 +1,19 @@
 <?php
 
 /**
- * Description of TokenConcreteFactory
+ * This class creates a Token given a Resource owner and a set of scopes
  *
- * @author andou
+ * @author antonio.pastorino@gmail.com
  */
 class Oauth_Factory_TokenProducer  {
 
+    
     /**
-     * Creates a Token
-     *
-     * @return Oauth_Model_Token
+     * Creates the token
+     * 
+     * @param Oauth_Model_ResourceOwner $resource_owner
+     * @param array $scopes
+     * @return \Oauth_Model_Token 
      */
     public function create(Oauth_Model_ResourceOwner $resource_owner, $scopes) {
 
@@ -52,6 +55,12 @@ class Oauth_Factory_TokenProducer  {
         return $access_token;
     }
 
+    /**
+     * Build the token content
+     *
+     * @param array $scopes
+     * @return array 
+     */
     private function buildTokenData($scopes) {
 
         $scopes = explode(" ", trim($scopes));
