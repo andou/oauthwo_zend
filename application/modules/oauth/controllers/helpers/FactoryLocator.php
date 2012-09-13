@@ -29,10 +29,10 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     /**
      * Returns the correct abstract factory to create a Token
      * 
-     * @return Oauth_Factory_AuthorizationCodeConcreteFactory
+     * @return Oauth_Builder_AuthorizationCode
      */
     public function getAuthorizationCodeFactory(){
-        return new Oauth_Factory_AuthorizationCodeConcreteFactory();
+        return new Oauth_Builder_AuthorizationCode();
     }
     
     /**

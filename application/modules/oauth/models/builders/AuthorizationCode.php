@@ -13,7 +13,7 @@
  *
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Factory_AuthorizationCodeConcreteFactory{
+class Oauth_Builder_AuthorizationCode{
 
     /**
      * Creates an authorization code
