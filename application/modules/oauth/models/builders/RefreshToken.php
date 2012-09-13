@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * RefreshTokenConcreteFactory.php, 
+ * RefreshTokenC.php, 
  * 
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  * @version 0.1
@@ -13,7 +13,7 @@
  *
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Factory_RefreshTokenConcreteFactory {
+class Oauth_Builder_RefreshToken{
 
     /**
      * Creates a refresh token 
@@ -54,7 +54,7 @@ class Oauth_Factory_RefreshTokenConcreteFactory {
     }
 
     /**
-     * Consumes a Refersh Token deleting it from the DB
+     * Consumes a Refresh Token deleting it from the DB
      *
      * @param string $code
      * @return string
