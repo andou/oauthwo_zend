@@ -1,51 +1,53 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * AuthorizationCode.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of AuthorizationCodeMapper
+ *  Implements an Authorization Code Mapper
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Mapper_AuthorizationCode {
+class Oauth_Mapper_AuthorizationCode extends Oauth_Mapper_Abstract{
 
-    protected $_dbTable;
 
-    public function setDbTable($dbTable) {
-        if (is_string($dbTable)) {
-            $dbTable = new $dbTable();
-        }
-        if (!$dbTable instanceof Zend_Db_Table_Abstract) {
-            throw new Exception('Invalid table data gateway provided');
-        }
-        $this->_dbTable = $dbTable;
-        return $this;
+    /**
+     * This object constructor
+     * 
+     */
+    public function __construct() {
+        $this->table_name = 'Oauth_Model_DbTable_AuthorizationCode';
     }
 
-    public function getDbTable() {
-        if (null === $this->_dbTable) {
-            $this->setDbTable('Oauth_Model_DbTable_AuthorizationCode');
-        }
-        return $this->_dbTable;
-    }
-
+    
+    /**
+     * Saves an Authorization Code in the DB
+     *
+     * @param Oauth_Model_AuthorizationCode $authorizationCode 
+     */
     public function save(Oauth_Model_AuthorizationCode $authorizationCode) {
         $data = array(
             'authorization_code' => $authorizationCode->getCode(),
             'client_id' => $authorizationCode->getClientId(),
             'resource_owner_id'=>$authorizationCode->getResourceOwnerId(),
             'scopes' => $authorizationCode->getScopes(),
-//            'generation_timestamp' => time(),
         );
 
         $this->getDbTable()->insert($data);
     }
     
     
-
+    /**
+     * Retrieves an authorization code from the DB by code
+    *
+    * @param string $code
+    * @return Oauth_Model_AuthorizationCode 
+    */
     public function find($code) {
         $result = $this->getDbTable()->find($code);
         if (0 == count($result)) {
@@ -66,6 +68,12 @@ class Oauth_Mapper_AuthorizationCode {
         return $code;
     }
     
+    /**
+     * Deletes an authorization code by code
+     *
+     * @param string $code
+     * @return int
+     */
     public function delete($code){
         
         $result = $this->getDbTable()->find($code);
@@ -81,4 +89,3 @@ class Oauth_Mapper_AuthorizationCode {
 
 }
 
-?>

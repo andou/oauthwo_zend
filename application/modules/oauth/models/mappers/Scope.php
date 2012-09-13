@@ -1,47 +1,43 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * Scope.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of ScopeMapper
+ *  Implements a Scope Model Mapper
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Mapper_Scope {
-        
-    protected $_dbTable;
+class Oauth_Mapper_Scope extends Oauth_Mapper_Abstract {
 
-    public function setDbTable($dbTable) {
-        if (is_string($dbTable)) {
-            $dbTable = new $dbTable();
-        }
-        if (!$dbTable instanceof Zend_Db_Table_Abstract) {
-            throw new Exception('Invalid table data gateway provided');
-        }
-        $this->_dbTable = $dbTable;
-        return $this;
+    /**
+     * This object constructor
+     * 
+     */
+    public function __construct() {
+        $this->table_name = 'Oauth_Model_DbTable_Scope';
     }
 
-    public function getDbTable() {
-        if (null === $this->_dbTable) {
-            $this->setDbTable('Oauth_Model_DbTable_Scope');
-        }
-        return $this->_dbTable;
-    }
-    
-    
-
+    /**
+     * Retrieves a Scope from the DB by name
+     *
+     * @param string $name
+     * @return Oauth_Model_Scope 
+     */
     public function find($name) {
         $result = $this->getDbTable()->find($name);
         if (0 == count($result)) {
             return;
         }
-        
+
         $server_mapper = new Oauth_Mapper_ResourceServer();
-        
+
         $row = $result->current();
         $scope = new Oauth_Model_Scope();
         $scope->setName($row->scope_id)
@@ -49,6 +45,6 @@ class Oauth_Mapper_Scope {
                 ->setResourceServer($server_mapper->find($row->resource_server_id));
         return $scope;
     }
+
 }
 
-?>

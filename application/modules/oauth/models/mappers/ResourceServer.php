@@ -1,37 +1,35 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * ResourceServer.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of ResourceServer
+ *  Implements a Resource Server Model Mapper
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Mapper_ResourceServer {
-    protected $_dbTable;
+class Oauth_Mapper_ResourceServer extends Oauth_Mapper_Abstract {
 
-    public function setDbTable($dbTable) {
-        if (is_string($dbTable)) {
-            $dbTable = new $dbTable();
-        }
-        if (!$dbTable instanceof Zend_Db_Table_Abstract) {
-            throw new Exception('Invalid table data gateway provided');
-        }
-        $this->_dbTable = $dbTable;
-        return $this;
+    /**
+     * This object constructor
+     * 
+     */
+    public function __construct() {
+        $this->table_name = 'Oauth_Model_DbTable_ResourceServer';
     }
 
-    public function getDbTable() {
-        if (null === $this->_dbTable) {
-            $this->setDbTable('Oauth_Model_DbTable_ResourceServer');
-        }
-        return $this->_dbTable;
-    }
-    
-
+    /**
+     * Retrieves a Resource Server from the DB by ID
+     *
+     * @param string $id
+     * @return Oauth_Model_ResourceServer 
+     */
     public function find($id) {
         $result = $this->getDbTable()->find($id);
         if (0 == count($result)) {
@@ -46,6 +44,5 @@ class Oauth_Mapper_ResourceServer {
                 ->setUri($row->resource_server_endpoint_uri);
         return $client;
     }
-    
-    
+
 }

@@ -1,37 +1,34 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * ResourceOwner.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of AuthorizationCodeMapper
+ *  Implements a Resource Owner Model Mapper
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Mapper_ResourceOwner {
+class Oauth_Mapper_ResourceOwner extends Oauth_Mapper_Abstract {
 
-    protected $_dbTable;
-
-    public function setDbTable($dbTable) {
-        if (is_string($dbTable)) {
-            $dbTable = new $dbTable();
-        }
-        if (!$dbTable instanceof Zend_Db_Table_Abstract) {
-            throw new Exception('Invalid table data gateway provided');
-        }
-        $this->_dbTable = $dbTable;
-        return $this;
+    /**
+     * This object constructor
+     * 
+     */
+    public function __construct() {
+        $this->table_name = 'Oauth_Model_DbTable_ResourceOwner';
     }
 
-    public function getDbTable() {
-        if (null === $this->_dbTable) {
-            $this->setDbTable('Oauth_Model_DbTable_ResourceOwner');
-        }
-        return $this->_dbTable;
-    }
-
+    /**
+     * Retrieve a resource owner from session id
+     *
+     * @return Oauth_Model_ResourceOwner|boolean 
+     */
     public function fromSession() {
         $auth = Zend_Auth::getInstance();
 
@@ -48,6 +45,12 @@ class Oauth_Mapper_ResourceOwner {
         return FALSE;
     }
 
+    /**
+     * Retrieves a Resource Owner from the DB by ID
+     *
+     * @param string $id
+     * @return Oauth_Model_ResourceOwner 
+     */
     public function find($id) {
         $result = $this->getDbTable()->find($id);
         if (0 == count($result)) {
@@ -63,14 +66,14 @@ class Oauth_Mapper_ResourceOwner {
         $select->where('user_id = ?', $resource_owner->getId());
 
         $rows = $table->fetchAll($select);
-        $references=  array();
-        
+        $references = array();
+
         for ($i = 0; $i < $rows->count(); $i++) {
             $row = $rows->current();
             $references[$row->resource_server_id] = $row->user_reference;
-            $rows->next();           
+            $rows->next();
         }
-        
+
         $resource_owner->setReferences($references);
 
 
@@ -78,5 +81,3 @@ class Oauth_Mapper_ResourceOwner {
     }
 
 }
-
-?>
