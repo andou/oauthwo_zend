@@ -1,27 +1,38 @@
 <?php
+/**
+ * 
+ * TokenProducer.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
+ */
 
 /**
- * This class creates a Token given a Resource owner and a set of scopes
+ *  Builder class to create Access Tokens
  *
- * @author antonio.pastorino@gmail.com
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Factory_TokenProducer  {
 
     
     /**
-     * Creates the token
+     * Creates the access token from a granting resource owner and a set of 
+     * granted scopes.
+     * 
+     * Creates a JWE with a JWS of a JWT of claims as plaintext.
      * 
      * @param Oauth_Model_ResourceOwner $resource_owner
-     * @param array $scopes
-     * @return \Oauth_Model_Token 
+     * @param string $scopes
+     * @return Oauth_Model_Token 
      */
     public function create(Oauth_Model_ResourceOwner $resource_owner, $scopes) {
 
         $code = array();
 
 
-        $token_signer = new Oauth_Factory_JSTProducer(PRIVATE_SIGN_KEY_LOCATION);
-        $token_encrypter = new Oauth_Factory_JETProducer();
+        $token_signer = new Oauth_Builder_JWS(PRIVATE_SIGN_KEY_LOCATION);
+        $token_encrypter = new Oauth_Builder_JWE();
 
         $access_token = new Oauth_Model_Token();
         $token_data = $this->buildTokenData($scopes);
@@ -56,10 +67,11 @@ class Oauth_Factory_TokenProducer  {
     }
 
     /**
-     * Build the token content
+     * Uses the set of scopes to retrieve data about the resource servers which 
+     * delivers and understand each scope.
      *
-     * @param array $scopes
-     * @return array 
+     * @param string $scopes
+     * @return array an associative array containing data to be encrypted in the access token
      */
     private function buildTokenData($scopes) {
 

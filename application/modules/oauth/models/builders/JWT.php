@@ -10,7 +10,7 @@
  *
  * @author andou
  */
-abstract class Oauth_Factory_JWTProducer {
+abstract class Oauth_Builder_JWT{
 
     protected function get_base64_encode($string) {
         //simply use the php built-in function

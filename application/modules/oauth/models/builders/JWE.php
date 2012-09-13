@@ -4,7 +4,7 @@
  *
  * @author andou
  */
-class Oauth_Factory_JETProducer extends Oauth_Factory_JWTProducer {
+class Oauth_Builder_JWE extends Oauth_Builder_JWT {
 
     //put your code here
 

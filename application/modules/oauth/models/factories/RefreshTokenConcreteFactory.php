@@ -1,21 +1,27 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * RefreshTokenConcreteFactory.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of TokenConcreteFactory
+ *  Builder class to create refresh tokens
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Factory_RefreshTokenConcreteFactory {
 
     /**
-     * Creates a refresh token
+     * Creates a refresh token 
      *
-     * @return Oauth_Model_IRefreshToken
+     * @param Oauth_Model_Client $client
+     * @param string $scopes
+     * @param Oauth_Model_ResourceOwner $resource_owner
+     * @return Oauth_Model_RefreshToken 
      */
     public function create(Oauth_Model_Client $client, $scopes, Oauth_Model_ResourceOwner $resource_owner) {
 
@@ -36,21 +42,36 @@ class Oauth_Factory_RefreshTokenConcreteFactory {
         return $refresh_token;
     }
 
+    /**
+     * Retrieve a Refresh Token from the DB
+     * 
+     * @param string $code
+     * @return Oauth_Model_RefreshToken
+     */
     public function retrieve($code) {
         $codeMapper = new Oauth_Mapper_RefreshToken();
         return $codeMapper->find($code);
     }
 
-    public function consume($code) {
+    /**
+     * Consumes a Refersh Token deleting it from the DB
+     *
+     * @param string $code
+     * @return string
+     */
+    public function consume($code) {        
         $codeMapper = new Oauth_Mapper_RefreshToken();
-
         $authorization_code = $codeMapper->find($code);
-
         $codeMapper->delete($code);
-
         return $authorization_code;
     }
 
+    /**
+     * Generates a $codeLen chars pseudo random string
+     *
+     * @param string $codeLen
+     * @return string 
+     */
     private function generateRandomNumber($codeLen) {
         if (file_exists('/dev/urandom')) { // Get 100 bytes of random data
             $randomData = file_get_contents('/dev/urandom', false, null, 0, 100) . uniqid(mt_rand(), true);
