@@ -1,20 +1,60 @@
 <?php
 /**
- * This class is a JSON Encrypted Token producer
+ * 
+ * JWE.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
+ */
+
+/**
+ *  Builder class to create JSON Encrypted Tokens
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Builder_JWE extends Oauth_Builder_JWT {
 
-    //put your code here
-
+    
+    /**
+     * The message header
+     *
+     * @var string
+     */
     protected $header;
+    
+    /**
+     * The encrypted used key. Void in this implementation
+     *
+     * @var string
+     */
     protected $encrypted_key;
+    
+    /**
+     * Crypted plaintext
+     *
+     * @var string
+     */
     protected $ciphertext;
+    
+    /**
+     * Integrity check value - NOT YET IMPLEMENTED!!
+     *
+     * @var string
+     */
     protected $integrity_value;
     
+    /**
+     * Shared key used to cipher the plaintext
+     *
+     * @var string
+     */
     private $key;
 
+    /**
+     * Constructor class. Sets some default values for this implementation
+     * 
+     */
     public function __construct() {
         $this->header = array();
         //direct encryption using a shared key
@@ -22,17 +62,25 @@ class Oauth_Builder_JWE extends Oauth_Builder_JWT {
         //AES in CBC mode with PKCS #5 padding using 256 bit keys
         $this->set_header('enc', 'A256CBC');
         $this->set_header('typ', 'JWT');
-        
-        
+        //void because we use direct encryption with shared key        
         $this->encrypted_key = "";
-        //$this->key = "asdpoaksd9a0093weka3p";
     }
     
-    
+    /**
+     * Sets the key used to cipher
+     *
+     * @param string $shared_key 
+     */
     public function set_key($shared_key){        
         $this->key=$shared_key;
     }
     
+    /**
+     * Builds a JWE ciphering a plaintext value
+     *
+     * @param string $plaintext
+     * @return string
+     */
     public function get_token($plaintext) {
 
         $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
@@ -53,5 +101,3 @@ class Oauth_Builder_JWE extends Oauth_Builder_JWT {
     
 
 }
-
-?>

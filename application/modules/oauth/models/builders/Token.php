@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * TokenProducer.php, 
+ * Token.php, 
  * 
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  * @version 0.1
@@ -13,7 +13,7 @@
  *
  * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
-class Oauth_Factory_TokenProducer  {
+class Oauth_Builder_Token  {
 
     
     /**
