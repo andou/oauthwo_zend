@@ -211,7 +211,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
     }
 
     /**
-     * Ensure the user is logged in using Zend_Auth, if not, prompt the login
+     * Ensures the user is logged in using Zend_Auth, if not, prompt the login
      *  
      */
     public function preDispatch() {
