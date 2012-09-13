@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * FactoryLocator.php, 
+ * load.mysql.php, 
  * 
  * @author framework.zend.com
  * @version 0.1
