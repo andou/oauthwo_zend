@@ -1,14 +1,18 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * FactoryLocator.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
  */
 
 /**
- * Description of FactoryLocator
+ *  Extends an abstract helper and is used by controllers to get factories
  *
- * @author andou
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
  */
 class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Action_Helper_Abstract{
     
@@ -16,7 +20,7 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     /**
      * Returns the correct abstract factory to create a Token
      * 
-     * @return Oauth_Model_Factory_TokenAbstractFactory
+     * @return Oauth_Factory_TokenProducer
      */
     public function getTokenFactory(){
         return new Oauth_Factory_TokenProducer();
@@ -26,7 +30,7 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     /**
      * Returns the correct abstract factory to create a Token
      * 
-     * @return Oauth_Model_Factory_TokenAbstractFactory
+     * @return Oauth_Factory_AuthorizationCodeConcreteFactory
      */
     public function getAuthorizationCodeFactory(){
         return new Oauth_Factory_AuthorizationCodeConcreteFactory();
@@ -35,7 +39,7 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     /**
      * Returns the correct factory to create a refresh token
      *
-     * @return \Oauth_Factory_RefreshTokenConcreteFactory 
+     * @return Oauth_Factory_RefreshTokenConcreteFactory 
      */
     public function getRefreshtokenFactory(){
         return new Oauth_Factory_RefreshTokenConcreteFactory();
@@ -43,5 +47,3 @@ class Oauth_Controller_Action_Helper_FactoryLocator extends Zend_Controller_Acti
     
     
 }
-
-?>
