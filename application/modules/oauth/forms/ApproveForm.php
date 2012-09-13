@@ -1,8 +1,25 @@
 <?php
+/**
+ * 
+ * ApproveForm.php, 
+ * 
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ * @version 0.1
+ * 
+ */
 
+/**
+ *  Extends a Zend_Form and realize the Approve/Deny OAuth form 
+ *
+ * @author Antonio Pastorino <antonio.pastorino@gmail.com>
+ */
 class Oauth_Form_ApproveForm extends Zend_Form {
     
-        
+    /**
+     * Initialize the Approvation form
+     * Uses a salt to verify session validity
+     * 
+     */    
     public function init() {
         
         $approve = $this->addElement('submit', 'yes', array(
@@ -30,6 +47,11 @@ class Oauth_Form_ApproveForm extends Zend_Form {
         ));
     }
     
+    /**
+     * Inject some values from the HTTP request into the form
+     * 
+     * @param array $request_values 
+     */
     public function injectRequestValues(array $request_values){              
         unset($request_values['module']);
         unset($request_values['action']);
