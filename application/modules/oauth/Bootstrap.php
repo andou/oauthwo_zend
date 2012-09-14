@@ -154,8 +154,8 @@ class Oauth_Bootstrap extends Zend_Application_Module_Bootstrap {
      * Adds factories and  mappers as resource type, enabling it auto-loading
      */
     protected function _initResourceLoader() {
-        $this->_resourceLoader->addResourceType('builder', 'models/builders', 'Builder');
-        $this->_resourceLoader->addResourceType('mapper', 'models/mappers', 'Mapper');
+        $this->_resourceLoader->addResourceType('builder', 'models/Builder', 'Builder');
+        $this->_resourceLoader->addResourceType('mapper', 'models/Mapper', 'Mapper');
     }
 
 }
