@@ -48,6 +48,30 @@ class Oauth_Form_ApproveForm extends Zend_Form {
     }
     
     /**
+     * Builds the disclaimer to tell resource owner what he is granting
+     *
+     * @param array $scopes
+     * @param Oauth_Model_Client $client 
+     */
+    public function buildDisclaimer($scopes, Oauth_Model_Client $client){
+        
+        $disclaimer = "<strong>%s</strong> will: <ul>%s</ul>";
+        $scope_desc = array();
+        
+        foreach ($scopes as $scope) {
+            $scope_desc[] = sprintf("<li>%s</li>", $scope->getDescription());
+        }
+        
+        $scope_desc = implode("", $scope_desc);
+        $description = sprintf($disclaimer, $client->getName(), $scope_desc);
+        
+        $this->setDescription($description);
+        
+        return $this;
+        
+    }
+    
+    /**
      * Inject some values from the HTTP request into the form
      * 
      * @param array $request_values 
@@ -60,6 +84,8 @@ class Oauth_Form_ApproveForm extends Zend_Form {
         foreach($request_values as $k=>$v){
             $this->addElement('hidden', $k, array('value' => $v));
         }        
+        
+        return $this;
     }
 
 }
