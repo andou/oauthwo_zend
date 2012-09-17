@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * AuthorizeController.php, 
@@ -47,7 +48,6 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         $this->_token_factory = $factoryLocator->getTokenFactory();
     }
 
-    
     /**
      * The index action of this controller.
      * Validates the incoming request and, if valid, prompt the user with
@@ -55,8 +55,12 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * 
      */
     public function indexAction() {
-
-        $this->validateRequest();
+        
+        try {
+            $this->validateRequest();
+        } catch (Exception $exc) {
+            return $this->handleException($exc);
+        }
 
         $this->view->message = 'Did you authorize this application?';
 
@@ -75,9 +79,12 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      *
      *
      */
-    public function processAction() {        
-        $this->validateRequest();
-        $request = $this->getRequest();
+    public function processAction() {
+        try {
+            $this->validateRequest();
+        } catch (Exception $exc) {
+            return $this->handleException($exc);
+        }
         // Check if we have a POST request, otherwise, redirect
         if (!$request->isPost()) {
             return $this->_helper->redirector('index');
@@ -97,7 +104,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         } else {// unreckognized value
             $this->view->message = 'process-authorize';
             $this->view->form = $form;
-            return $this->render('index');// re-render the login form
+            return $this->render('index'); // re-render the login form
         }
     }
 
@@ -139,7 +146,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         $urlHelper = $this->_helper->RedirectUriFormatter;
 
         $url = $urlHelper->errorRedirect($data[REDIRECT_URI], $state);
-        
+
         $this->_helper->redirector->gotoUrl($url);
     }
 
@@ -149,7 +156,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * @return Oauth_Form_ApproveForm 
      */
     protected function getForm() {
-        
+
         //create a new OAuth Approve Form
         $form = new Oauth_Form_ApproveForm(array(
                     'action' => '/v2/oauth/authorize/process',
@@ -168,7 +175,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         $client = $this->_helper->ModelLoader->LoadClient($client_id);
 
         return $form->buildDisclaimer($scopes, $client)
-                    ->injectRequestValues($this->getRequest()->getParams());
+                        ->injectRequestValues($this->getRequest()->getParams());
     }
 
     /**
@@ -216,6 +223,33 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
     }
 
     /**
+     * Helper function to handle an exception
+     *
+     * @param Exception $e 
+     */
+    private function handleException(Exception $exc) {
+        $error = $exc->getMessage();
+        $error = explode(":", $error);
+        $error_description = $error[1];
+        $error = $error[0];
+
+        $response = array(
+            'error' => $error,
+        );
+
+        if ($error_description)
+            $response['error_description'] = $error_description;
+
+
+        $this->getResponse()->setHttpResponseCode($exc->getCode());
+        $this->getResponse()->setBody(json_encode($response));
+
+        $this->getResponse()->setHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        return;
+    }
+
+    /**
      * Ensures the user is logged in using Zend_Auth, if not, prompt the login
      *  
      */
@@ -227,4 +261,5 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
             $this->_helper->redirector('index', 'index', 'login');
         }
     }
+
 }
