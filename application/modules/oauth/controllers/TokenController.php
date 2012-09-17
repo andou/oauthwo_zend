@@ -47,10 +47,13 @@ class Oauth_TokenController extends Zend_Controller_Action {
 
         try {
             $this->validateRequest();
-        } catch (Oauthwo_RequestException $exc) {
+        } catch (Exception $exc) {
 
+            
             $error = $exc->getMessage();
-            $error_description = $exc->getErrorDescription();
+            $error = explode(":",$error);
+            $error_description = $error[1];
+            $error = $error[0];
 
             $response = array(
                 'error' => $error,
@@ -60,7 +63,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
                 $response['error_description'] = $error_description;
 
 
-            $this->getResponse()->setHttpResponseCode($exc->getHttpCode());
+            $this->getResponse()->setHttpResponseCode($exc->getCode());
             $this->getResponse()->setBody(json_encode($response));
 
             $this->getResponse()->setHeader('Content-Type', 'application/json;charset=UTF-8');
@@ -186,7 +189,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $request = $this->getRequest();
 
         if (!$request->isPost())
-            throw new Oauthwo_RequestException('invalid_request', 401, 'the request should be a post request');
+            throw new Exception('invalid_request:the request should be a post request', 401);
 
         $this->validateRequestRFC();
         $this->validateRequestServerSpecific();
@@ -200,29 +203,29 @@ class Oauth_TokenController extends Zend_Controller_Action {
      */
     protected function validateRequestRFC() {
         if (!$grant_type = $this->getRequest()->getParam(GRANT_TYPE))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No grant_type parameter specified');
+            throw new Exception('invalid_request'.'no grant_type parameter specified', 401);
 
         switch ($grant_type) {
             case GRANT_TYPE_AUTHORIZATION_CODE:
                 if (!$this->getRequest()->getParam(REDIRECT_URI))
-                    throw new Oauthwo_RequestException('invalid_request', 401, 'No redirect_uri parameter specified');
+                    throw new Exception('invalid_request'.':no redirect_uri parameter specified', 401);
                 if (!$this->getRequest()->getParam(CODE))
-                    throw new Oauthwo_RequestException('invalid_request', 401, 'No code parameter specified');
+                    throw new Exception('invalid_request'.':no code parameter specified', 401);
                 break;
             case GRANT_TYPE_CLIENT_CREDENTIAL:
                 break;
             case GRANT_TYPE_PASSWORD:
                 if (!$this->getRequest()->getParam(USERNAME))
-                    throw new Oauthwo_RequestException('invalid_request', 401, 'No username parameter specified');
+                    throw new Exception('invalid_request'.':no username parameter specified', 401);
                 if (!$this->getRequest()->getParam(PASSWORD))
-                    throw new Oauthwo_RequestException('invalid_request', 401, 'No password parameter specified');
+                    throw new Exception('invalid_request'.':no password parameter specified', 401);
                 break;
             case GRANT_TYPE_REFRESH_TOKEN:
                 if (!$this->getRequest()->getParam(REFRESH_TOKEN))
-                    throw new Oauthwo_RequestException('invalid_request', 401, 'No refresh token parameter specified');
+                    throw new Exception('invalid_request'.':no refresh token parameter specified', 401);
                 break;
             default:
-                throw new Oauthwo_RequestException('invalid_request', 401, 'unsupported grant type');
+                throw new Exception('invalid_request'.':unsupported grant type', 401);
                 break;
         }
     }
@@ -237,7 +240,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $request = $this->getRequest();
 
         if (!$grant_type = $request->getParam(GRANT_TYPE))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No grant_type parameter specified');
+            throw new Exception('invalid_request'.':no grant_type parameter specified', 401);
 
         switch ($grant_type) {
             case GRANT_TYPE_AUTHORIZATION_CODE:
@@ -255,7 +258,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
                 $this->validateRefreshToken($request);
                 break;
             default:
-                throw new Oauthwo_RequestException('invalid_request', 401, 'unsupported grant type');
+                throw new Exception('invalid_request'.':unsupported grant type', 401);
                 break;
         }
     }
@@ -266,7 +269,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
 
 
         if (!$code = $this->getRequest()->getParam(REFRESH_TOKEN))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No refresh token parameter specified');
+            throw new Exception('invalid_request'.':no refresh token parameter specified', 401);
 
         $authorization = $request->getHeader('Authorization');
 
@@ -278,24 +281,24 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $client_secret = isset($client_auth[1]) ? $client_auth[1] : FALSE;
 
         if ($basic != "Basic" || !$client_id || !$client_secret)
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No authorization header');
+            throw new Exception('invalid_request'. ':no authorization header', 401);
 
         if (!$req_client = $this->_helper->ModelLoader->loadClient($client_id))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'.':wrong credential', 401);
 
         if (!($req_client->getSecret() === $client_secret))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'.':wrong credential', 401);
 
         if (!$req_client->isAuthorized($grant_type))
-            throw new Oauthwo_RequestException('unhautorized_client', 401, 'Client not authorized');
+            throw new Exception('unhautorized_client'.':client not authorized', 401);
 
 
         if ((!$refresh_token = $this->_refresh_token_factory->retrieve($code)) ||
                 (!$refresh_token->checkClient($req_client)))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'refresh token mismatch or inexistent');
+            throw new Exception('invalid_request'.':refresh token mismatch or inexistent', 401);
 
         if (!$refresh_token->checkTimeValidity(time()))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'refresh toke expired');
+            throw new Exception('invalid_request'.':refresh toke expired', 401);
     }
 
     private function validateAuthorizationCode($request) {
@@ -303,9 +306,9 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $grant_type = $request->getParam(GRANT_TYPE);
 
         if (!$redirect_uri = $request->getParam(REDIRECT_URI))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No redirect_uri parameter specified');
+            throw new Exception('invalid_request'.':no redirect_uri parameter specified', 401);
         if (!$code = $request->getParam(CODE))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No code parameter specified');
+            throw new Exception('invalid_request'.':no code parameter specified', 401);
 
         $authorization = $request->getHeader('Authorization');
 
@@ -317,26 +320,26 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $client_secret = isset($client_auth[1]) ? $client_auth[1] : FALSE;
 
         if ($basic != "Basic" || !$client_id || !$client_secret)
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No authorization header');
+            throw new Exception('invalid_request'.':no authorization header', 401);
 
         if (!$req_client = $this->_helper->ModelLoader->loadClient($client_id))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'. ':wrong credential', 401);
 
         if (!($req_client->getSecret() === $client_secret))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'.':wrong credential', 401);
 
         if (!$req_client->isAuthorized($grant_type))
-            throw new Oauthwo_RequestException('unhautorized_client', 401, 'Client not authorized');
+            throw new Exception('unhautorized_client'.':client not authorized', 401);
 
         if (!$req_client->checkRedirectUri($redirect_uri))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'redirect uri mismatch');
+            throw new Exception('invalid_request'.':redirect uri mismatch', 401);
 
         if ((!$authorization_code = $this->_code_factory->retrieve($code)) ||
                 (!$authorization_code->checkClient($req_client)))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'authorization code mismatch or inexistent');
+            throw new Exception('invalid_request'.':authorization code mismatch or inexistent', 401);
 
         if (!$authorization_code->checkTimeValidity(time()))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'authorization code expired');
+            throw new Exception('invalid_request'.':authorization code expired', 401);
     }
 
     private function validatePassword($request) {
@@ -353,28 +356,28 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $client_secret = isset($client_auth[1]) ? $client_auth[1] : FALSE;
 
         if ($basic != "Basic" || !$client_id || !$client_secret)
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No authorization header');
+            throw new Exception('invalid_request'.':no authorization header', 401);
 
         if (!$req_client = $this->_helper->ModelLoader->loadClient($client_id))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'. ':wrong credential', 401);
 
         if (!($req_client->getSecret() === $client_secret))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'.':wrong credential', 401);
 
         if (!$req_client->isAuthorized($grant_type))
-            throw new Oauthwo_RequestException('unhautorized_client', 401, 'Client not authorized');
+            throw new Exception('unhautorized_client'.':client not authorized', 401);
 
         if (!$username = $this->getRequest()->getParam(USERNAME))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No username parameter specified');
+            throw new Exception('invalid_request'.':no username parameter specified', 401);
 
         if (!$password = $this->getRequest()->getParam(PASSWORD))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No password parameter specified');
+            throw new Exception('invalid_request'.':no password parameter specified', 401);
 
         if (!$scope = $this->getRequest()->getParam(SCOPE))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No scopes');
+            throw new Exception('invalid_request'.':no scopes', 401);
         foreach (explode(" ", trim($scope)) as $s) {
             if (!$this->_helper->ModelLoader->loadScope($s))
-                throw new Oauthwo_RequestException('invalid_request', 401, 'invalid scope');
+                throw new Exception('invalid_request'.':invalid scope', 401);
         }
 
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
@@ -389,7 +392,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $authAdapter->setCredential($password);
 
         if ($authAdapter->authenticate()->getCode() != Zend_Auth_Result::SUCCESS)
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong username or password');
+            throw new Exception('invalid_request'.':wrong username or password', 401);
     }
 
     private function validateClientCredential($request) {
@@ -406,22 +409,22 @@ class Oauth_TokenController extends Zend_Controller_Action {
         $client_secret = isset($client_auth[1]) ? $client_auth[1] : FALSE;
 
         if ($basic != "Basic" || !$client_id || !$client_secret)
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No authorization header');
+            throw new Exception('invalid_request'.':no authorization header', 401);
 
         if (!$req_client = $this->_helper->ModelLoader->loadClient($client_id))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'.':wrong credential', 401);
 
         if (!($req_client->getSecret() === $client_secret))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'wrong credential');
+            throw new Exception('invalid_request'. ':wrong credential', 401);
 
         if (!$req_client->isAuthorized($grant_type))
-            throw new Oauthwo_RequestException('unhautorized_client', 401, 'Client not authorized');
+            throw new Exception('unhautorized_client'.':client not authorized', 401);
 
         if (!$scope = $this->getRequest()->getParam(SCOPE))
-            throw new Oauthwo_RequestException('invalid_request', 401, 'No scopes');
+            throw new Exception('invalid_request'.':no scopes', 401);
         foreach (explode(" ", trim($scope)) as $s) {
             if (!$this->_helper->ModelLoader->loadScope($s))
-                throw new Oauthwo_RequestException('invalid_request', 401, 'invalid scope');
+                throw new Exception('invalid_request'.':invalid scope', 401);
         }
     }
 
