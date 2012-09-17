@@ -6,7 +6,7 @@
  */
 
 /**
- * Description of AuthorizeController
+ * Description of AuthorizeController Controller
  *
  * @author andou
  */

@@ -55,7 +55,10 @@ class Oauth_Form_ApproveForm extends Zend_Form {
      */
     public function buildDisclaimer($scopes, Oauth_Model_Client $client){
         
-        $disclaimer = "<strong>%s</strong> will: <ul>%s</ul>";
+        $disclaimer = "The application named:<strong> %s</strong><br/> ".
+                "Requests to:<br/>".
+                " <ul>%s</ul>";
+        
         $scope_desc = array();
         
         foreach ($scopes as $scope) {
