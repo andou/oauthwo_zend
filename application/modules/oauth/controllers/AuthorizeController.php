@@ -89,6 +89,10 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
             $this->_helper->viewRenderer->setNoRender(true);
             return;
         }
+        
+        
+        $request = $this->getRequest();
+        
         // Check if we have a POST request, otherwise, redirect
         if (!$request->isPost()) {
             return $this->_helper->redirector('index');
