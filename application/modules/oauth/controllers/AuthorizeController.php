@@ -59,7 +59,9 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         try {
             $this->validateRequest();
         } catch (Exception $exc) {
-            return $this->handleException($exc);
+            $this->handleException($exc);
+            $this->_helper->viewRenderer->setNoRender(true);
+            return;
         }
 
         $this->view->message = 'Did you authorize this application?';
@@ -83,7 +85,9 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         try {
             $this->validateRequest();
         } catch (Exception $exc) {
-            return $this->handleException($exc);
+            $this->handleException($exc);
+            $this->_helper->viewRenderer->setNoRender(true);
+            return;
         }
         // Check if we have a POST request, otherwise, redirect
         if (!$request->isPost()) {
@@ -230,7 +234,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
     private function handleException(Exception $exc) {
         $error = $exc->getMessage();
         $error = explode(":", $error);
-        $error_description = $error[1];
+        $error_description = isset($error[1]) ? $error[1] : NULL;
         $error = $error[0];
 
         $response = array(
