@@ -41,6 +41,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
 
         //initialize the default visualization
         $this->_helper->viewRenderer('index');
+        $this->_helper->_layout->setLayout('layout');
 
         //inject the factory dependencies
         $factoryLocator = $this->_helper->FactoryLocator;
@@ -64,7 +65,7 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
             return;
         }
 
-        $this->view->message = 'Did you authorize this application?';
+        //$this->view->message = 'Did you authorize this application?';
 
         $this->view->form = $this->getForm();
     }

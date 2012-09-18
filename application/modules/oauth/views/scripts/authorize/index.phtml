@@ -1,9 +1,35 @@
-<div id="welcome">    
-    <h4><?= $this->escape($this->message) ?></h4>
-</div>
+
+<div id="approve-content" style="
+    margin-left: auto;
+margin-right: auto;
+padding: 10px;
+width: 90%;
+margin-top: 20px;
+">
+    
+    <?php
+    
+    $styles = '
+        dl.zend_form{height:28px;}
+        dt#yes-label,dt#no-label{display:none}
+        dd#yes-element{float:left;margin-right:10px;}
+        dd#yes-element input,dd#no-element input{cursor: pointer;
+border: solid 1px #505050;
+background-color: #95AFDE;
+font-weight:bold;
+color: #505050;
+width: 100px;
+height: 30px;}
+dd#yes-element input:hover,dd#no-element input:hover{background-color: #7191C9;}
+';
+    $this->headStyle()->appendStyle($styles);
+    ?>
+    
+
 
 <?php if($this->form):?>
 <div class="form">
     <?=$this->form?>
     </div>
 <?php endif; ?>
+</div>
