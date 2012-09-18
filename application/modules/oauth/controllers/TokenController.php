@@ -33,7 +33,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
     public function init() {
 
         $this->_helper->viewRenderer->setNoRender(true);
-
+	$this->_helper->layout()->disableLayout();
         //inject the factory dependencies
         $factoryLocator = $this->_helper->FactoryLocator;
         $this->_code_factory = $factoryLocator->getAuthorizationCodeFactory();
