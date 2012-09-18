@@ -56,12 +56,11 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * 
      */
     public function indexAction() {
-        
+
         try {
             $this->validateRequest();
         } catch (Exception $exc) {
             $this->handleException($exc);
-            $this->_helper->viewRenderer->setNoRender(true);
             return;
         }
 
@@ -87,13 +86,12 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
             $this->validateRequest();
         } catch (Exception $exc) {
             $this->handleException($exc);
-            $this->_helper->viewRenderer->setNoRender(true);
             return;
         }
-        
-        
+
+
         $request = $this->getRequest();
-        
+
         // Check if we have a POST request, otherwise, redirect
         if (!$request->isPost()) {
             return $this->_helper->redirector('index');
@@ -254,6 +252,10 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
         $this->getResponse()->setBody(json_encode($response));
 
         $this->getResponse()->setHeader('Content-Type', 'application/json;charset=UTF-8');
+
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
 
         return;
     }

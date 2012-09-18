@@ -30,8 +30,16 @@ class Oauth_TokenController extends Zend_Controller_Action {
      */
     protected $_refresh_token_factory;
 
+    /**
+     * The request validator
+     *
+     * @var Oauth_Request_Validator
+     */
+    protected $_request_validator;
+    
     public function init() {
 
+        $this->_request_validator = new Oauth_Request_Validator();
         $this->_helper->viewRenderer->setNoRender(true);
 	$this->_helper->layout()->disableLayout();
         //inject the factory dependencies
