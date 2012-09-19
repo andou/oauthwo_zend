@@ -151,4 +151,8 @@ class Oauth_Model_Request implements Oauth_Request_Interface {
         return $this->getParam(PASSWORD);        
     }
 
+    
+    public function isPost() {
+        return $this->_request->isPost();
+    }
 }

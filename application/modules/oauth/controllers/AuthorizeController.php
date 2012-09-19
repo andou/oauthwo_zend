@@ -56,16 +56,11 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * 
      */
     public function indexAction() {
-
-        try {
-            $this->validateRequest();
-        } catch (Exception $exc) {
-            $this->handleException($exc);
+        if (!$this->validateRequest()) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout()->disableLayout();
             return;
         }
-
-        //$this->view->message = 'Did you authorize this application?';
-
         $this->view->form = $this->getForm();
     }
 
@@ -82,13 +77,12 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      *
      */
     public function processAction() {
-        try {
-            $this->validateRequest();
-        } catch (Exception $exc) {
-            $this->handleException($exc);
+
+        if (!$this->validateRequest()) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout()->disableLayout();
             return;
         }
-
 
         $request = $this->getRequest();
 
@@ -104,11 +98,11 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
             return $this->render('index'); // re-render the login form
         }
 
-        if ($form->getValue('yes')) {
+        if ($form->getValue('yes')) {//Resource Owner says yes
             $this->processApprove($form->getValues());
-        } else if ($form->getValue("no")) {
+        } else if ($form->getValue("no")) {//Resource Owner says no
             $this->processDeny($form->getValues());
-        } else {// unreckognized value
+        } else {//unreckognized value
             $this->view->message = 'process-authorize';
             $this->view->form = $form;
             return $this->render('index'); // re-render the login form
@@ -190,76 +184,27 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * 
      */
     protected function validateRequest() {
+
         $request = new Oauth_Model_Request($this->getRequest());
+
         if (!$this->_request_validator->isValid($request)) {
-            foreach ($this->_request_validator->getMessages() as $messageId => $message) {
-                switch ($messageId) {
-                    case Oauth_Request_Validator::MISSING_RESPONSE_TYPE:
-                        throw new Exception('invalid_request:missing response type', 401);
-                        break;
-                    case Oauth_Request_Validator::MISSING_CLIENT:
-                        throw new Exception('invalid_request:missing client', 401);
-                        break;
-                    case Oauth_Request_Validator::MISSING_MISSING_SCOPE:
-                        throw new Exception('invalid_request:missing scope', 401); //change this to redirect
-                        break;
-                    case Oauth_Request_Validator::MISSING_REDIRECT_URI:
-                        throw new Exception('invalid_request:missing redirect uri', 401);
-                        break;
-                    case Oauth_Request_Validator::WRONG_CLIENT_ID:
-                        throw new Exception('invalid_request:client not exists', 401);
-                        break;
-                    case Oauth_Request_Validator::WRONG_CLIENT_TYPE:
-                        throw new Exception('unauthorized_client', 401);
-                        break;
-                    case Oauth_Request_Validator::WRONG_REDIRECT_URI:
-                        throw new Exception('invalid_request:redirect uri mismatch', 401);
-                        break;
-                    case Oauth_Request_Validator::WRONG_RESPONSE_TYPE:
-                        throw new Exception('unsupported_response_type', 401);
-                        break;
-                    case Oauth_Request_Validator::WRONG_SCOPE:
-                        throw new Exception('invalid_scope', 401); //change to redirect
-                        break;
-                    default:
-                        throw new Exception('invalid_request', 401);
-                        break;
-                }
-            }
+            $response = Array();
+
+            $messages = $this->_request_validator->getMessages();
+            $last_msg = explode(":", array_pop($messages));
+            $response['error'] = $last_msg[0];
+            $response['error_description'] = isset($last_msg[1]) ? $last_msg[1] : "";
+
+            $this->getResponse()->setHttpResponseCode(401);
+            $this->getResponse()->setBody(json_encode($response));
+            $this->getResponse()->setHeader('Content-Type', 'application/json;charset=UTF-8');
+
+            return FALSE;
         }
+
+        return TRUE;
     }
-
-    /**
-     * Helper function to handle an exception
-     *
-     * @param Exception $e 
-     */
-    private function handleException(Exception $exc) {
-        $error = $exc->getMessage();
-        $error = explode(":", $error);
-        $error_description = isset($error[1]) ? $error[1] : NULL;
-        $error = $error[0];
-
-        $response = array(
-            'error' => $error,
-        );
-
-        if ($error_description)
-            $response['error_description'] = $error_description;
-
-
-        $this->getResponse()->setHttpResponseCode($exc->getCode());
-        $this->getResponse()->setBody(json_encode($response));
-
-        $this->getResponse()->setHeader('Content-Type', 'application/json;charset=UTF-8');
-
-
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
-
-        return;
-    }
-
+    
     /**
      * Ensures the user is logged in using Zend_Auth, if not, prompt the login
      *  

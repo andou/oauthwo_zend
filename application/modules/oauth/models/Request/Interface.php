@@ -98,4 +98,11 @@ interface Oauth_Request_Interface {
      * @return mixed password parameter if present in this request, FALSE otherwise 
      */
     function getPassword();
+    
+    /**
+     * Checks whethewer the request is POST or not
+     * 
+     * @return boolean true if this is a POST request, false if not
+     */
+    function isPost();
 }
