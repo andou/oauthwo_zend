@@ -27,7 +27,7 @@ class Oauth_Request_Validator extends Zend_Validate_Abstract {
     const MISSING_RESPONSE_TYPE = 'missing_response_type';
     const MISSING_CLIENT = 'missing_client';
     const MISSING_REDIRECT_URI = 'missing_redirect_uri';
-    const MISSING_MISSING_SCOPE = 'missing_scope';
+    const MISSING_SCOPE = 'missing_scope';
     const MISSING_GRANT_TYPE = 'missing_grant_type';
     const MISSING_CODE = 'missing_code';
     const MISSING_USERNAME = 'missing_username';
@@ -46,7 +46,7 @@ class Oauth_Request_Validator extends Zend_Validate_Abstract {
         self::MISSING_RESPONSE_TYPE => "invalid_request:Response type not specified",
         self::MISSING_CLIENT => "invalid_request:client id not specified",
         self::MISSING_REDIRECT_URI => "invalid_request:redirect uri not specified",
-        self::MISSING_MISSING_SCOPE => "invalid_request:scope not specified",
+        self::MISSING_SCOPE => "invalid_request:scope not specified",
         self::WRONG_CLIENT_ID => "invalid_request:Client does not exists",
         self::WRONG_CLIENT_TYPE => "unauthorized_client:Client is not authorized to do that!",
         self::WRONG_REDIRECT_URI => "invalid_request:Redirect uri is wrong!",
@@ -232,7 +232,6 @@ class Oauth_Request_Validator extends Zend_Validate_Abstract {
         //creating the mappers - should be removed
         $clientMapper = new Oauth_Mapper_Client();
 
-
         $authorization = $request->getAuthorization();
         $basic = substr($authorization, 0, 5);
         $client_auth = base64_decode(substr($authorization, 6));
@@ -274,7 +273,7 @@ class Oauth_Request_Validator extends Zend_Validate_Abstract {
 
         
         if (!$scope = $request->getScope()) {
-            $this->_error(self::MISSING_MISSING_SCOPE);
+            $this->_error(self::MISSING_SCOPE);
             return FALSE;
         }
 

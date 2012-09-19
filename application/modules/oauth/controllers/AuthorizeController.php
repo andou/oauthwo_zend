@@ -180,8 +180,9 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
     }
 
     /**
-     * Index method to validate an obtaining grant request
+     * This method calls the Validator to check if the request is valid or not
      * 
+     * @return boolean TRUE if the request is valid, FALSE otherwise
      */
     protected function validateRequest() {
 
