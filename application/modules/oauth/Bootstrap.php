@@ -107,7 +107,7 @@ define('CLIENT_TYPE_NATIVE', 'native');
 
 
 //to be put in some config file
-define('PRIVATE_SIGN_KEY_LOCATION', '/var/www/oauthwo_zend/docs/key.pem');
+define('PRIVATE_SIGN_KEY_LOCATION', '/var/ssl-www/auth/keys/key.pem');
 
 define('ACCESS_TOKEN_VALIDITY', 600000); //in seconds
 
