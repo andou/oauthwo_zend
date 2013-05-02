@@ -157,10 +157,14 @@ class Oauth_AuthorizeController extends Zend_Controller_Action {
      * @return Oauth_Form_ApproveForm 
      */
     protected function getForm() {
-
+    	//avoid hard code the links... if the application moves to 
+    	//another path.. then the link will be invalid
+	$action = $this->view->url(array('module' => 'oauth',
+					'controller' => 'authorize',
+					'action'     => 'process'), 'Oauth_module_route');
         //create a new OAuth Approve Form
         $form = new Oauth_Form_ApproveForm(array(
-                    'action' => '/v2/oauth/authorize/process',
+                    'action' => $action/*'/v2/oauth/authorize/process'*/,
                     'method' => 'post',
                 ));
 

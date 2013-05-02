@@ -190,7 +190,7 @@ class Oauth_TokenController extends Zend_Controller_Action {
      */
     private function retrieveClientFromHeader(Oauth_Model_Request $request) {
         $authorization = $request->getAuthorization();
-        $client_auth = base64_decode(substr($authorization, 6));
+        $client_auth = base64_decode(substr($authorization, 6)); //why there is no check that the scheme is BASIC?
         $client_auth = explode(":", $client_auth);
         $client_id = $client_auth[0];
         return $this->_helper->ModelLoader->loadClient($client_id);

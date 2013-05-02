@@ -107,7 +107,12 @@ define('CLIENT_TYPE_NATIVE', 'native');
 
 
 //to be put in some config file
-define('PRIVATE_SIGN_KEY_LOCATION', '/var/www/oauthwo_zend/docs/key.pem');
+//define('PRIVATE_SIGN_KEY_LOCATION', '/var/www/oauthwo_zend/docs/key.pem');
+
+//if the key is stored one level up of Application path... then it is better to
+//use the relative path. In this manner if the application is moved to other
+//host or to anothe path on the host it will work
+define('PRIVATE_SIGN_KEY_LOCATION', APPLICATION_PATH.'/../keys/key.pem');
 
 define('ACCESS_TOKEN_VALIDITY', 600000); //in seconds
 
